@@ -1,6 +1,8 @@
 module.exports = {
   testEnvironment: 'node',
   testMatch: ['**/__tests__/**/*.js', '**/?(*.)+(spec|test).js'],
+  maxWorkers: 1,
+  forceExit: true,
   collectCoverageFrom: [
     'routes/**/*.js',
     'models/**/*.js',
