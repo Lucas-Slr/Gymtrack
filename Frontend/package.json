@@ -9,6 +9,7 @@
     "test": "vitest",
     "test:ui": "vitest --ui",
     "test:coverage": "vitest --coverage",
+    "lint": "echo 'Linting not configured'",
     "serve:ssr:Frontend": "node dist/Frontend/server/server.mjs"
   },
   "prettier": {
