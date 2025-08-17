@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+  # Backend API avec MongoDB Atlas
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: gymtrack-backend-atlas
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+      - PORT=5000
+      - MONGODB_URI=mongodb+srv://lucassoulairol:9coxAP3t4M19xvuX@gymtrack.juz6tq1.mongodb.net/?retryWrites=true&w=majority&appName=Gymtrack
+      - JWT_SECRET=8ca3d728edae213105e58b33fb6edb2c0679fac794fccbaf62d18d2a7b9b16f0c68af63c8ef281b9e7bc36eb699038d2bf866573efe0c3994d016ecdeb45f231
+      - JWT_REFRESH_SECRET=0b7e262b573bc985f5701bd3306bb5093818d655074408c2b7c6998bd1fb9441f3186706320f3d4526273f53f366a3cb083310b74c2ca87c11789afb7e91c2e8
+      - FRONTEND_URL=http://localhost
+    ports:
+      - "5000:5000"
+    networks:
+      - gymtrack-network
+
+  # Frontend Angular
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    container_name: gymtrack-frontend-atlas
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - gymtrack-network
+
+networks:
+  gymtrack-network:
+    driver: bridge
