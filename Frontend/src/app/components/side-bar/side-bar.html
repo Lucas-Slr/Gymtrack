@@ -1,0 +1,36 @@
+<aside class="h-screen w-64 bg-green-600 text-white flex flex-col shadow-2xl fixed left-0 top-0 z-40">
+  <div class="flex items-center gap-3 px-6 py-6 border-b border-green-500/40">
+    <div class="bg-noir rounded-full p-1 border-2 border-green-500">
+      <app-icon name="dumbbell" size="lg" className="text-green-600"></app-icon>
+    </div>
+    <span class="font-bold text-lg tracking-wide">GYMTRACK</span>
+    <a routerLink="/profil" class="ml-auto">
+      <app-icon name="user" size="xl" className="text-white hover:text-green-300 transition"></app-icon>
+    </a>
+  </div>
+  <nav class="flex-1 flex flex-col gap-2 mt-6 px-2">
+    <a routerLink="/dashboard" routerLinkActive="bg-green-700 text-white" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-700 hover:text-white transition">
+      <app-icon name="dashboard" size="md" className="text-white"></app-icon>
+      <span>Dashboard</span>
+    </a>
+    <a routerLink="/creation-seance" routerLinkActive="bg-green-700 text-white" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-700 hover:text-white transition">
+      <app-icon name="add" size="md" className="text-white"></app-icon>
+      <span>Créer une séance</span>
+    </a>
+    <a routerLink="/seance-en-cours" routerLinkActive="bg-green-700 text-white" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-700 hover:text-white transition">
+      <app-icon name="timer" size="md" className="text-white"></app-icon>
+      <span>Séance en cours</span>
+    </a>
+    <a routerLink="/seances-enregistrees" routerLinkActive="bg-green-700 text-white" class="flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-green-700 hover:text-white transition">
+      <app-icon name="bookmark" size="md" className="text-white"></app-icon>
+      <span>Séances enregistrées</span>
+    </a>
+  </nav>
+  <div class="px-2 mb-4">
+    <button (click)="logout()" class="w-full flex items-center gap-3 px-4 py-3 rounded-lg hover:bg-red-600 hover:text-white transition text-red-200">
+      <app-icon name="log-out" size="md" className="text-red-200"></app-icon>
+      <span>Déconnexion</span>
+    </button>
+  </div>
+  <div class="mt-auto mb-4 px-6 text-xs text-green-200">© 2024 Gymtrack</div>
+</aside>

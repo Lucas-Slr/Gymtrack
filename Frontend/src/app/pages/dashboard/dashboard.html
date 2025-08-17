@@ -1,0 +1,88 @@
+<div class="flex flex-col gap-8">
+  <!-- Statistiques principales -->
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div *ngFor="let stat of statCards" class="rounded-2xl p-6 shadow-xl bg-gradient-to-br from-gray-900 to-green-600/10 text-white flex items-center gap-4 border border-green-600/30">
+      <app-icon [name]="stat.icon" size="xl" className="text-green-600 opacity-80"></app-icon>
+      <div>
+        <div class="text-2xl font-bold text-green-600">
+          <span *ngIf="loadingStats" class="animate-pulse">...</span>
+          <span *ngIf="!loadingStats">{{ stat.value }}</span>
+        </div>
+        <div class="text-sm opacity-80">{{ stat.title }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Graphique de performance -->
+  <div class="bg-gray-900 rounded-2xl p-6 shadow-xl border border-green-600/20">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-white">Performance mensuelle</h2>
+      <div class="flex items-center gap-2">
+        <div *ngIf="loadingChart" class="text-sm text-gray-400 animate-pulse">Chargement...</div>
+        <div *ngIf="errorChart" class="text-sm text-red-400">Erreur de chargement</div>
+        <button *ngIf="errorChart" (click)="chargerGraphique()" class="text-xs text-green-400 hover:text-green-300">
+          Réessayer
+        </button>
+      </div>
+    </div>
+    
+    <!-- Graphique Chart.js -->
+    <div *ngIf="!loadingChart && !errorChart">
+      <app-chart 
+        [data]="graphData" 
+        [labels]="graphLabels" 
+        title="Séances par mois">
+      </app-chart>
+    </div>
+    
+    <!-- Message d'erreur -->
+    <div *ngIf="errorChart" class="flex items-center justify-center h-64 text-red-400">
+      <div class="text-center">
+        <div class="text-lg mb-2">Erreur lors du chargement du graphique</div>
+        <button (click)="chargerGraphique()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+          Réessayer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tableau avancé des séances -->
+  <div class="bg-gray-900 rounded-2xl p-6 shadow-xl border border-green-600/20">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-lg font-semibold text-white">Séances récentes</h2>
+      <div class="flex items-center gap-2">
+        <div *ngIf="loadingSeances" class="text-sm text-gray-400 animate-pulse">Chargement...</div>
+        <div *ngIf="errorSeances" class="text-sm text-red-400">Erreur de chargement</div>
+        <button *ngIf="errorSeances" (click)="chargerSeancesRecentes()" class="text-xs text-green-400 hover:text-green-300">
+          Réessayer
+        </button>
+      </div>
+    </div>
+    
+    <!-- Tableau avancé -->
+    <div *ngIf="!loadingSeances && !errorSeances">
+      <app-seances-table 
+        [seances]="seances" 
+        (seanceSelected)="onSeanceSelected($event)"
+        (seanceDeleted)="onSeanceDeleted($event)">
+      </app-seances-table>
+    </div>
+    
+    <!-- Message d'erreur -->
+    <div *ngIf="errorSeances" class="flex items-center justify-center h-64 text-red-400">
+      <div class="text-center">
+        <div class="text-lg mb-2">Erreur lors du chargement des séances</div>
+        <button (click)="chargerSeancesRecentes()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+          Réessayer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bouton de rechargement global -->
+  <div *ngIf="errorStats || errorChart || errorSeances" class="flex justify-center">
+    <button (click)="rechargerDonnees()" class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+      Recharger toutes les données
+    </button>
+  </div>
+</div>

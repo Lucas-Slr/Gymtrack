@@ -1,0 +1,237 @@
+<div class="min-h-screen bg-noir text-white p-6">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 flex justify-between items-center">
+      <div>
+        <h1 class="text-3xl font-bold text-white">Mon Profil</h1>
+        <p class="text-gray-400 mt-2">Gérez vos informations personnelles</p>
+      </div>
+      
+      <!-- Bouton Modifier le profil -->
+      <button 
+        *ngIf="!isEditing"
+        (click)="toggleEdit()"
+        class="bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+      >
+        <app-icon name="edit" size="md" className="mr-2"></app-icon>
+        Modifier le profil
+      </button>
+    </div>
+
+    <!-- Messages d'erreur et de succès -->
+    <div *ngIf="errorMessage" class="mb-6 p-4 bg-red-900 border border-red-700 rounded-lg text-red-200">
+      {{ errorMessage }}
+    </div>
+    
+    <div *ngIf="successMessage" class="mb-6 p-4 bg-green-900 border border-green-700 rounded-lg text-green-200">
+      {{ successMessage }}
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <!-- Formulaire d'édition - Section principale -->
+      <div class="lg:col-span-2">
+        <div class="bg-gray-900 rounded-xl p-6 border border-gray-800">
+          <form [formGroup]="profileForm" class="space-y-6" (ngSubmit)="onSaveProfile()">
+            <!-- Nom d'utilisateur et Email -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Nom d'utilisateur</label>
+                <input 
+                  type="text" 
+                  formControlName="username"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Email</label>
+                <input 
+                  type="email" 
+                  formControlName="email"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+            </div>
+
+            <!-- Nom et prénom -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Prénom</label>
+                <input 
+                  type="text" 
+                  formControlName="prenom"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Nom</label>
+                <input 
+                  type="text" 
+                  formControlName="nom"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+            </div>
+
+            <!-- Âge, Poids, Taille -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Âge</label>
+                <input 
+                  type="number" 
+                  formControlName="age"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Poids (kg)</label>
+                <input 
+                  type="number" 
+                  formControlName="poids"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-300 mb-2">Taille (cm)</label>
+                <input 
+                  type="number" 
+                  formControlName="taille"
+                  [readonly]="!isEditing"
+                  class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                  [class.bg-gray-700]="!isEditing"
+                >
+              </div>
+            </div>
+
+            <!-- À propos de moi -->
+            <div>
+              <label class="block text-sm font-medium text-gray-300 mb-2">À propos de moi</label>
+              <textarea 
+                rows="4" 
+                formControlName="aboutMe"
+                [readonly]="!isEditing"
+                class="w-full px-4 py-3 bg-gray-800 border border-gray-700 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent resize-none disabled:opacity-50 disabled:cursor-not-allowed"
+                [class.bg-gray-700]="!isEditing"
+                placeholder="Parlez-nous de vous..."
+              ></textarea>
+            </div>
+
+            <!-- Boutons d'action -->
+            <div class="pt-4 flex space-x-4" *ngIf="isEditing">
+              <button 
+                type="submit" 
+                [disabled]="isLoading || !isFormValid"
+                class="flex-1 bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 disabled:from-gray-600 disabled:to-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-all duration-200 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 disabled:transform-none"
+              >
+                <span *ngIf="isLoading" class="flex items-center justify-center">
+                  <app-icon name="timer" size="md" className="loading-spinner mr-2"></app-icon>
+                  Sauvegarde en cours...
+                </span>
+                <span *ngIf="!isLoading">Sauvegarder</span>
+              </button>
+              
+              <button 
+                type="button"
+                (click)="toggleEdit()"
+                [disabled]="isLoading"
+                class="px-6 py-3 bg-gray-700 hover:bg-gray-600 disabled:bg-gray-800 text-white font-semibold rounded-lg transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2 focus:ring-offset-gray-900"
+              >
+                Annuler
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Carte de profil - Section latérale -->
+      <div class="lg:col-span-1" *ngIf="user">
+        <div class="bg-gray-900 rounded-xl border border-gray-800 overflow-hidden">
+          <!-- En-tête avec motif géométrique -->
+          <div class="relative h-32 bg-gradient-to-br from-green-600 to-green-800 overflow-hidden">
+            <!-- Motifs géométriques -->
+            <div class="absolute inset-0 opacity-20">
+              <div class="absolute top-4 right-4 w-8 h-8 border-2 border-white transform rotate-45 geometric-pattern"></div>
+              <div class="absolute top-12 right-8 w-6 h-6 bg-white opacity-60 transform rotate-12 geometric-pattern"></div>
+              <div class="absolute top-20 right-4 w-4 h-4 border border-white transform rotate-45 geometric-pattern"></div>
+              <div class="absolute top-8 right-16 w-3 h-3 bg-white opacity-80 geometric-pattern"></div>
+            </div>
+            
+            <!-- Icône des paramètres -->
+            <button (click)="onSettingsClick()" class="absolute top-4 right-4 text-white hover:text-green-300 transition">
+              <app-icon name="settings" size="md" className="text-white"></app-icon>
+            </button>
+          </div>
+
+          <!-- Photo de profil -->
+          <div class="flex justify-center -mt-12 mb-4">
+            <div class="relative">
+              <div class="w-24 h-24 bg-gradient-to-br from-green-500 to-green-700 rounded-full flex items-center justify-center border-4 border-gray-900 profile-photo">
+                <app-icon name="profile" size="xl" className="text-white"></app-icon>
+              </div>
+              <button (click)="onEditPhoto()" class="absolute bottom-0 right-0 bg-green-600 hover:bg-green-700 text-white rounded-full p-1 transition">
+                <app-icon name="edit" size="sm" className="text-white"></app-icon>
+              </button>
+            </div>
+          </div>
+
+          <!-- Informations du profil -->
+          <div class="px-6 pb-6">
+            <h3 class="text-xl font-bold text-white text-center mb-1">{{ displayName }}</h3>
+            <p class="text-green-400 text-center text-sm mb-4">Fitness Enthusiast</p>
+            
+            <p class="text-gray-300 text-sm leading-relaxed mb-6" *ngIf="user.aboutMe">
+              "{{ user.aboutMe }}"
+            </p>
+            <p class="text-gray-500 text-sm leading-relaxed mb-6 italic" *ngIf="!user.aboutMe">
+              Aucune description ajoutée
+            </p>
+
+            <!-- Statistiques -->
+            <div class="grid grid-cols-3 gap-4 mb-6">
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-500 stats-number">{{ stats.sessions }}</div>
+                <div class="text-xs text-gray-400">Séances</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-500 stats-number">{{ stats.days }}</div>
+                <div class="text-xs text-gray-400">Jours</div>
+              </div>
+              <div class="text-center">
+                <div class="text-2xl font-bold text-green-500 stats-number">{{ stats.months }}</div>
+                <div class="text-xs text-gray-400">Mois</div>
+              </div>
+            </div>
+
+            <!-- Réseaux sociaux -->
+            <div class="flex justify-center space-x-3">
+              <button (click)="onSocialMediaClick('facebook')" class="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition social-icon">
+                <app-icon name="facebook" size="md" className="text-white"></app-icon>
+              </button>
+              <button (click)="onSocialMediaClick('twitter')" class="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition social-icon">
+                <app-icon name="twitter" size="md" className="text-white"></app-icon>
+              </button>
+              <button (click)="onSocialMediaClick('instagram')" class="w-10 h-10 bg-gray-800 hover:bg-green-600 rounded-lg flex items-center justify-center transition social-icon">
+                <app-icon name="instagram" size="md" className="text-white"></app-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

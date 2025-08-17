@@ -1,0 +1,39 @@
+<form [formGroup]="exerciceForm" class="space-y-4 p-4 bg-white rounded-lg shadow-md max-w-md mx-auto">
+  <div>
+    <label for="nom" class="block text-sm font-medium text-gray-700">Nom de l'exercice</label>
+    <input id="nom" type="text" formControlName="nom" placeholder="Ex: Pompes" required
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100" />
+  </div>
+
+  <div>
+    <label for="type" class="block text-sm font-medium text-gray-700">Type</label>
+    <select id="type" formControlName="type"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100">
+      <option value="repetition">Répétitions</option>
+      <option value="temps">Temps</option>
+    </select>
+  </div>
+
+  <div *ngIf="type === 'repetition'">
+    <label for="repetitions" class="block text-sm font-medium text-gray-700">Répétitions</label>
+    <input id="repetitions" type="number" formControlName="repetitions" min="1" placeholder="Ex: 10"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100" />
+  </div>
+
+  <div *ngIf="type === 'temps'">
+    <label for="duree" class="block text-sm font-medium text-gray-700">Durée (secondes)</label>
+    <input id="duree" type="number" formControlName="duree" min="1" placeholder="Ex: 30"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100" />
+  </div>
+
+  <div>
+    <label for="repos" class="block text-sm font-medium text-gray-700">Repos (secondes)</label>
+    <input id="repos" type="number" formControlName="repos" min="0" placeholder="Ex: 60"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm bg-gray-100" />
+  </div>
+
+  <div class="flex justify-end pt-2">
+    <button type="submit" [disabled]="!exerciceForm.valid"
+      class="px-4 py-2 bg-blue-600 text-white rounded shadow hover:bg-blue-700 transition disabled:opacity-50">Valider</button>
+  </div>
+</form>

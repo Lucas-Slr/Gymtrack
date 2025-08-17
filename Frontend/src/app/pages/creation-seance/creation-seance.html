@@ -1,0 +1,203 @@
+<div class="min-h-screen bg-gray-900 flex">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex-1 flex items-center justify-center">
+    <div class="text-center">
+      <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-green-600 mx-auto mb-4"></div>
+      <p class="text-white text-lg">Vérification des séances en cours...</p>
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div *ngIf="!isLoading" class="flex-1 flex">
+    <!-- Left Column - Form -->
+    <div class="flex-1 p-8">
+      <div class="max-w-2xl">
+        <h1 class="text-3xl font-bold text-white mb-8 flex items-center gap-3">
+          <app-icon name="add" size="lg" className="text-green-600"></app-icon>
+          Créer une séance
+        </h1>
+        
+        <!-- Séance Form -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8" [class.opacity-50]="!!seanceEnCours && !isModification">
+          <h2 class="text-xl font-semibold text-white mb-6">Informations de la séance</h2>
+          <form [formGroup]="seanceForm" class="space-y-4">
+            <div>
+              <label for="nom" class="block text-sm font-medium text-gray-300 mb-2">Nom de la séance</label>
+              <input 
+                id="nom" 
+                type="text" 
+                formControlName="nom" 
+                placeholder="Ex: Full Body, Cardio, Musculation..." 
+                [disabled]="!!seanceEnCours && !isModification"
+                class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+              />
+            </div>
+          </form>
+        </div>
+
+        <!-- Exercice Form -->
+        <div class="bg-gray-800 rounded-lg p-6 mb-8" [class.opacity-50]="!!seanceEnCours && !isModification">
+          <h2 class="text-xl font-semibold text-white mb-6">Ajouter un exercice</h2>
+          <form [formGroup]="exerciceForm" (ngSubmit)="ajouterExercice()" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label for="exerciceNom" class="block text-sm font-medium text-gray-300 mb-2">Nom de l'exercice</label>
+                <input 
+                  id="exerciceNom" 
+                  type="text" 
+                  formControlName="nom" 
+                  placeholder="Ex: Pompes, Squats..." 
+                  [disabled]="!!seanceEnCours && !isModification"
+                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <label for="duree" class="block text-sm font-medium text-gray-300 mb-2">Durée (secondes)</label>
+                <input 
+                  id="duree" 
+                  type="number" 
+                  formControlName="duree" 
+                  min="1"
+                  [disabled]="!!seanceEnCours && !isModification"
+                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <label for="exerciceNombreSeries" class="block text-sm font-medium text-gray-300 mb-2">Nombre de séries</label>
+                <input 
+                  id="exerciceNombreSeries" 
+                  type="number" 
+                  formControlName="nombreSeries" 
+                  min="1"
+                  [disabled]="!!seanceEnCours && !isModification"
+                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+              <div>
+                <label for="tempsRepos" class="block text-sm font-medium text-gray-300 mb-2">Temps de repos (secondes)</label>
+                <input 
+                  id="tempsRepos" 
+                  type="number" 
+                  formControlName="tempsRepos" 
+                  min="0"
+                  [disabled]="!!seanceEnCours && !isModification"
+                  class="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg text-white focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent disabled:opacity-50 disabled:cursor-not-allowed"
+                />
+              </div>
+            </div>
+            <div class="flex justify-end">
+              <button 
+                type="submit" 
+                [disabled]="!exerciceForm.valid || (!!seanceEnCours && !isModification)"
+                class="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                <app-icon name="add" size="sm" className="text-white"></app-icon>
+                Ajouter l'exercice
+              </button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Liste des exercices -->
+        <div *ngIf="exercices.length > 0" class="bg-gray-800 rounded-lg p-6 mb-8">
+          <h2 class="text-xl font-semibold text-white mb-6">Exercices de la séance</h2>
+          <div class="space-y-3">
+            <div *ngFor="let exercice of exercices; let i = index" class="flex items-center justify-between p-4 bg-gray-700 rounded-lg">
+              <div class="flex-1">
+                <h3 class="text-white font-medium">{{ exercice.nom }}</h3>
+                <p class="text-gray-400 text-sm">
+                  Durée: {{ exercice.duree }}s | Séries: {{ exercice.nombreSeries }} | Repos: {{ exercice.tempsRepos }}s
+                </p>
+              </div>
+              <button 
+                (click)="supprimerExercice(i)" 
+                class="ml-4 text-red-400 hover:text-red-300 transition"
+              >
+                <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clip-rule="evenodd"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Message d'erreur -->
+        <div *ngIf="errorMessage" class="mb-4 p-4 bg-red-600 text-white rounded-lg flex items-center gap-3">
+          <app-icon name="warning" size="md" className="text-white"></app-icon>
+          <div>
+            <p class="font-medium">{{ errorMessage }}</p>
+            <p *ngIf="seanceEnCours" class="text-sm mt-1">
+              <a routerLink="/seance-en-cours" class="underline hover:no-underline">Cliquez ici pour aller à la séance en cours</a>
+            </p>
+          </div>
+        </div>
+
+        <!-- Case à cocher pour enregistrer la séance -->
+        <div class="mb-6 p-4 bg-gray-700 rounded-lg" [formGroup]="seanceForm" [class.opacity-50]="!!seanceEnCours && !isModification">
+          <label class="flex items-center space-x-3" [class.cursor-pointer]="!(!!seanceEnCours && !isModification)" [class.cursor-not-allowed]="!!seanceEnCours && !isModification">
+            <input 
+              type="checkbox" 
+              formControlName="enregistree"
+              [disabled]="!!seanceEnCours && !isModification"
+              class="w-5 h-5 text-green-600 bg-gray-600 border-gray-500 rounded focus:ring-green-500 focus:ring-2 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <span class="text-white font-medium">Enregistrer cette séance pour la réutiliser plus tard</span>
+          </label>
+          <p class="text-gray-400 text-sm mt-2 ml-8">
+            Cette séance sera disponible dans la section "Séances enregistrées" pour être relancée ou modifiée.
+          </p>
+        </div>
+
+        <!-- Bouton de sauvegarde -->
+        <div class="flex justify-end">
+          <button 
+            (click)="onSubmit()" 
+            [disabled]="!seanceForm.valid || exercices.length === 0 || isSaving || (!!seanceEnCours && !isModification)"
+            class="px-8 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700 transition disabled:opacity-50 disabled:cursor-not-allowed text-lg font-medium flex items-center gap-2"
+          >
+            <app-icon *ngIf="!isSaving" name="save" size="md" className="text-white"></app-icon>
+            <div *ngIf="isSaving" class="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>
+            {{ isSaving ? 'Sauvegarde...' : 'Sauvegarder la séance' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column - Preview -->
+    <div class="w-80 bg-gray-800 border-l border-gray-700 p-6">
+      <div class="bg-gradient-to-br from-green-600 to-green-800 rounded-lg p-6 mb-6">
+        <div class="text-center">
+          <div class="w-20 h-20 bg-white rounded-full mx-auto mb-4 flex items-center justify-center">
+            <svg class="w-10 h-10 text-green-600" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+          </div>
+          <h3 class="text-white text-lg font-semibold">Nouvelle Séance</h3>
+          <p class="text-green-100 text-sm">En cours de création</p>
+        </div>
+      </div>
+
+      <div class="space-y-4">
+        <div class="bg-gray-700 rounded-lg p-4">
+          <h4 class="text-white font-medium mb-2">Résumé</h4>
+          <div class="text-gray-300 text-sm space-y-1">
+            <p>Exercices: {{ exercices.length }}</p>
+            <p>Durée totale: {{ calculerDureeTotale() }} min</p>
+          </div>
+        </div>
+
+        <div class="bg-gray-700 rounded-lg p-4">
+          <h4 class="text-white font-medium mb-2">Actions</h4>
+          <div class="space-y-2">
+            <button class="w-full px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition text-sm">
+              Prévisualiser
+            </button>
+            <button class="w-full px-4 py-2 bg-gray-600 text-white rounded hover:bg-gray-500 transition text-sm">
+              Dupliquer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,69 @@
+
+// Tailwind CSS
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Styles globaux */
+html, body { 
+  height: 100%; 
+  background-color: #1f2937;
+  color: white;
+}
+
+body { 
+  margin: 0; 
+  font-family: Roboto, "Helvetica Neue", sans-serif; 
+}
+
+/* ÉLIMINER COMPLÈTEMENT LES COULEURS VIOLETTES/ROSES D'ANGULAR MATERIAL */
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-thick,
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-start,
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-end,
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-outline-gap {
+  border-color: #34ad00 !important;
+  color: #34ad00 !important;
+}
+
+.mat-mdc-form-field-outline,
+.mat-mdc-form-field-outline-start,
+.mat-mdc-form-field-outline-end,
+.mat-mdc-form-field-outline-gap {
+  border-color: rgba(52, 173, 0, 0.3) !important;
+  color: rgba(52, 173, 0, 0.3) !important;
+}
+
+.mat-mdc-form-field.mat-focused .mat-mdc-form-field-label {
+  color: #34ad00 !important;
+}
+
+.mat-mdc-form-field-label {
+  color: #34ad00 !important;
+}
+
+.mat-mdc-form-field-icon-suffix {
+  color: #34ad00 !important;
+}
+
+/* Forcer les couleurs vertes sur tous les éléments Material */
+.mat-mdc-button.mat-primary,
+.mat-mdc-raised-button.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-outlined-button.mat-primary {
+  --mdc-filled-button-container-color: #34ad00 !important;
+  --mdc-filled-button-label-text-color: white !important;
+}
+
+.mat-mdc-fab.mat-primary,
+.mat-mdc-mini-fab.mat-primary {
+  --mdc-filled-button-container-color: #34ad00 !important;
+  --mdc-filled-button-label-text-color: white !important;
+}
+
+/* Éliminer les couleurs par défaut du thème */
+:root {
+  --mdc-filled-button-container-color: #34ad00 !important;
+  --mdc-filled-button-label-text-color: white !important;
+  --mdc-outlined-button-label-text-color: #34ad00 !important;
+  --mdc-outlined-button-outline-color: #34ad00 !important;
+}
