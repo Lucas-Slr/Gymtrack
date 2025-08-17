@@ -38,20 +38,24 @@ const authLimiter = rateLimit({
   }
 });
 
-// Connexion à MongoDB
-mongoose.connect(process.env.MONGODB_URI)
-.then(() => {
-  console.log('Connecté à MongoDB');
-  
-  // Démarrer le serveur seulement après la connexion MongoDB
-  app.listen(PORT, () => {
-    console.log(`Serveur démarré sur le port ${PORT}`);
+// Connexion à MongoDB (seulement si pas en mode test)
+if (process.env.NODE_ENV !== 'test') {
+  mongoose.connect(process.env.MONGODB_URI)
+  .then(() => {
+    console.log('Connecté à MongoDB');
+    
+    // Démarrer le serveur seulement après la connexion MongoDB
+    app.listen(PORT, () => {
+      console.log(`Serveur démarré sur le port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Erreur de connexion à MongoDB :', err);
+    process.exit(1);
   });
-})
-.catch((err) => {
-  console.error('Erreur de connexion à MongoDB :', err);
-  process.exit(1);
-});
+} else {
+  console.log('Mode test - MongoDB sera géré par les tests');
+}
 
 // Routes
 const authRoutes = require('./routes/auth');
